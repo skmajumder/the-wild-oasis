@@ -1,22 +1,26 @@
 import styled from "styled-components";
+import GlobalStyles from "./styles/GlobalStyles";
 
 const H1 = styled.h1`
   font-size: 40px;
+  color: var(--color-brand-700);
   text-transform: capitalize;
   font-weight: 600;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 `;
 
 const StyledApp = styled.div`
-  background-color: aliceblue;
+  background-color: var(--color-grey-100);
   padding: 20px;
 `;
 
 const App = () => {
   return (
-    <StyledApp>
-      <H1>The wild oasis</H1>
-    </StyledApp>
+    <>
+      <GlobalStyles />
+      <StyledApp>
+        <H1>The wild oasis</H1>
+      </StyledApp>
+    </>
   );
 };
 
