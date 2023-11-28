@@ -1,12 +1,6 @@
 import styled from "styled-components";
 import GlobalStyles from "./styles/GlobalStyles";
-
-const H1 = styled.h1`
-  font-size: 40px;
-  color: var(--color-brand-700);
-  text-transform: capitalize;
-  font-weight: 600;
-`;
+import Heading from "./ui/Heading";
 
 const StyledApp = styled.div`
   background-color: var(--color-grey-100);
@@ -18,7 +12,9 @@ const App = () => {
     <>
       <GlobalStyles />
       <StyledApp>
-        <H1>The wild oasis</H1>
+        <Heading as="h1">The wild oasis</Heading>
+        <Heading as="h2">This is headline 2</Heading>
+        <Heading as="h3">This is headline 3</Heading>
       </StyledApp>
     </>
   );
