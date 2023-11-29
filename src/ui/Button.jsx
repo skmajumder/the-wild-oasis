@@ -52,11 +52,12 @@ const Button = styled.button`
   border: none;
   box-shadow: var(--shadow-sm);
   border-radius: var(--border-radius-sm);
-  font-size: 1.4rem;
-  padding: 1.2rem 1.6rem;
-  font-weight: 500;
-  color: var(--color-brand-50);
-  background-color: var(--color-brand-600);
+  ${(props) => variations[props.variation]}
+  ${(props) => sizes[props.size]}
 `;
 
+Button.defaultProps = {
+  variation: "primary",
+  size: "medium",
+};
 export default Button;
