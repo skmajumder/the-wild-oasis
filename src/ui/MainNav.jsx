@@ -5,7 +5,7 @@ import {
   HiOutlineCog,
   HiOutlineHome,
   HiOutlineHomeModern,
-  HiOutlineUser,
+  HiOutlineUsers,
 } from "react-icons/hi2";
 
 const NavList = styled.ul`
@@ -27,8 +27,6 @@ const StyledNavLink = styled(NavLink)`
     padding: 1.2rem 2.4rem;
     transition: all 0.3s;
   }
-
-  /* This works because react-router places the active class on the active NavLink */
   &:hover,
   &:active,
   &.active:link,
@@ -77,7 +75,7 @@ const MainNav = () => {
         </li>
         <li>
           <StyledNavLink to="/users">
-            <HiOutlineUser />
+            <HiOutlineUsers />
             <span>Users</span>
           </StyledNavLink>
         </li>
