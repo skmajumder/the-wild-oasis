@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
+import { useMutation } from "@tanstack/react-query";
+import { deleteCabin } from "../../services/apiCabins";
+import Spinner from "../../ui/Spinner";
 
 const TableRow = styled.div`
   display: grid;
@@ -41,7 +44,20 @@ const Discount = styled.p`
 `;
 
 const CabinRow = ({ cabin }) => {
-  const { image, name, maxCapacity, regularPrice, discount } = cabin;
+  const {
+    id: cabinID,
+    image,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+  } = cabin;
+
+  const { isLoading: isDeleting, mutate } = useMutation({
+    mutationFn: deleteCabin,
+  });
+
+  if (isDeleting) return <Spinner />;
 
   return (
     <TableRow role="row">
@@ -50,7 +66,9 @@ const CabinRow = ({ cabin }) => {
       <p>Fits up to {maxCapacity} guests</p>
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{discount ? formatCurrency(discount) : "--"}</Discount>
-      <button>Delete</button>
+      <button onClick={() => mutate(cabinID)} disabled={isDeleting}>
+        Delete
+      </button>
     </TableRow>
   );
 };
