@@ -6,13 +6,12 @@ const TableRow = styled.div`
   column-gap: 2.4rem;
   align-items: center;
   padding: 1.4rem 2.4rem;
-
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
 
-const Img = styled.img`
+const Image = styled.img`
   display: block;
   width: 6.4rem;
   aspect-ratio: 3 / 2;
@@ -21,20 +20,36 @@ const Img = styled.img`
   transform: scale(1.5) translateX(-7px);
 `;
 
-const Cabin = styled.div`
+const Cabin = styled.p`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
 `;
 
-const Price = styled.div`
+const Price = styled.p`
   font-family: "Sono";
   font-weight: 600;
 `;
 
-const Discount = styled.div`
+const Discount = styled.p`
   font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+const CabinRow = ({ cabin }) => {
+  const { image, name, maxCapacity, regularPrice, discount } = cabin;
+
+  return (
+    <TableRow role="row">
+      <Image src={image} alt={name} />
+      <Cabin>{name}</Cabin>
+      <p>Fits up to {maxCapacity} guests</p>
+      <Price>{regularPrice}</Price>
+      <Discount>{discount ? discount : "--"}</Discount>
+    </TableRow>
+  );
+};
+
+export default CabinRow;
