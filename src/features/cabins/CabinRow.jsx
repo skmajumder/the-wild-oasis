@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "../../services/apiCabins";
-import Spinner from "../../ui/Spinner";
 
 const TableRow = styled.div`
   display: grid;
@@ -53,11 +52,16 @@ const CabinRow = ({ cabin }) => {
     discount,
   } = cabin;
 
+  const queryClient = useQueryClient();
+
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: deleteCabin,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cabin"],
+      });
+    },
   });
-
-  if (isDeleting) return <Spinner />;
 
   return (
     <TableRow role="row">
