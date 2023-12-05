@@ -11,7 +11,7 @@ import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
-  const { errors: formErrors } = formState;
+  const { errors: formInputErrors } = formState;
 
   const queryClient = useQueryClient();
   const { mutate, isLoading: isCreating } = useMutation({
@@ -36,17 +36,18 @@ function CreateCabinForm() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
-      <FormRow label="Cabin name" error={formErrors?.name?.message}>
+      <FormRow label="Cabin name" error={formInputErrors?.name?.message}>
         <Input
           type="text"
           id="name"
           {...register("name", { required: "Cabin name is required" })}
+          disabled={isCreating}
         />
       </FormRow>
 
       <FormRow
         label="Maximum capacity"
-        error={formErrors?.maxCapacity?.message}
+        error={formInputErrors?.maxCapacity?.message}
       >
         <Input
           type="number"
@@ -58,10 +59,14 @@ function CreateCabinForm() {
               message: "Max capacity of a cabin is 2 to 16",
             },
           })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow label="Regular price" error={formErrors?.regularPrice?.message}>
+      <FormRow
+        label="Regular price"
+        error={formInputErrors?.regularPrice?.message}
+      >
         <Input
           type="number"
           id="regularPrice"
@@ -72,10 +77,11 @@ function CreateCabinForm() {
               message: "The minimum price for a cabin is 100",
             },
           })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow label="Discount" error={formErrors?.discount?.message}>
+      <FormRow label="Discount" error={formInputErrors?.discount?.message}>
         <Input
           type="number"
           id="discount"
@@ -83,27 +89,33 @@ function CreateCabinForm() {
           {...register("discount", {
             required: "Discount price is required",
             validate: (value) =>
-              value <= getValues().regularPrice ||
+              Number(value) <= Number(getValues().regularPrice) ||
               `Discount should be less than regular price`,
           })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow label="description" error={formErrors?.description?.message}>
+      <FormRow
+        label="Description"
+        error={formInputErrors?.description?.message}
+      >
         <Textarea
           type="number"
           id="description"
           {...register("description", { required: "Description is required" })}
           defaultValue=""
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow label="Cabin photo" error={formErrors?.image?.message}>
+      <FormRow label="Cabin photo">
         <FileInput
           type="file"
           id="image"
-          {...register("image", { required: "Cabin photo is required" })}
+          // {...register("image", { required: "Cabin photo is required" })}
           accept="image/*"
+          disabled={isCreating}
         />
       </FormRow>
 
