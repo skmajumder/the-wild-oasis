@@ -28,3 +28,13 @@ export const formatCurrency = (value) =>
   new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(
     value
   );
+
+export const generateId = () => {
+  // * Get the current time in milliseconds
+  const currentTime = Math.floor(new Date().getTime() + Math.random() * 900);
+
+  // * Extract the last 6 digits
+  const last6Digits = currentTime.toString().slice(-6);
+
+  return last6Digits;
+};
