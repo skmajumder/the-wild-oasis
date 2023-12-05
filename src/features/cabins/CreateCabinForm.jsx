@@ -48,7 +48,8 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
+  const { errors: formErrors } = formState;
 
   const queryClient = useQueryClient();
   const { mutate, isLoading: isCreating } = useMutation({
@@ -67,11 +68,20 @@ function CreateCabinForm() {
     mutate(data);
   }
 
+  const onError = (errors) => {
+    console.log(errors);
+  };
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" {...register("name")} required />
+        <Input
+          type="text"
+          id="name"
+          {...register("name", { required: "Cabin name is required" })}
+        />
+        {formErrors?.name?.message && <Error>{formErrors.name.message}</Error>}
       </FormRow>
 
       <FormRow>
@@ -79,9 +89,17 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="maxCapacity"
-          {...register("maxCapacity")}
-          required
+          {...register("maxCapacity", {
+            required: "Max capacity of a cabin is required",
+            min: {
+              value: 2,
+              message: "Max capacity of a cabin is 2 to 16",
+            },
+          })}
         />
+        {formErrors?.maxCapacity?.message && (
+          <Error>{formErrors.maxCapacity.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
@@ -89,9 +107,17 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
-          {...register("regularPrice")}
-          required
+          {...register("regularPrice", {
+            required: "Cabin regular price is required",
+            min: {
+              value: 100,
+              message: "The minimum price for a cabin is 100",
+            },
+          })}
         />
+        {formErrors?.regularPrice?.message && (
+          <Error>{formErrors.regularPrice.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
@@ -99,10 +125,17 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="discount"
-          {...register("discount")}
           defaultValue={0}
-          required
+          {...register("discount", {
+            required: "Discount price is required",
+            validate: (value) =>
+              value <= getValues().regularPrice ||
+              `Discount should be less than regular price`,
+          })}
         />
+        {formErrors?.discount?.message && (
+          <Error>{formErrors.discount.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
@@ -110,9 +143,12 @@ function CreateCabinForm() {
         <Textarea
           type="number"
           id="description"
-          {...register("description")}
+          {...register("description", { required: "Description is required" })}
           defaultValue=""
         />
+        {formErrors?.description?.message && (
+          <Error>{formErrors.description.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
@@ -120,9 +156,12 @@ function CreateCabinForm() {
         <FileInput
           type="file"
           id="image"
-          {...register("image")}
+          {...register("image", { required: "Cabin photo is required" })}
           accept="image/*"
         />
+        {formErrors?.image?.message && (
+          <Error>{formErrors.image.message}</Error>
+        )}
       </FormRow>
 
       <FormRow>
