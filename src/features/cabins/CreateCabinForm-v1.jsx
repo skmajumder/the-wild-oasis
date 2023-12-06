@@ -10,14 +10,8 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ cabin = {} }) {
-  const { id: editId, ...restEditValue } = cabin;
-  const isEditSession = Boolean(editId);
-  console.log(restEditValue);
-
-  const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: isEditSession ? restEditValue : {},
-  });
+function CreateCabinForm() {
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors: formInputErrors } = formState;
 
   const queryClient = useQueryClient();
