@@ -9,6 +9,7 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
+import useCreateCabin from "./useCreateCabin";
 
 function CreateCabinForm({ cabin = {} }) {
   // * Cabin information that needs to be edited
@@ -21,20 +22,10 @@ function CreateCabinForm({ cabin = {} }) {
   });
   const { errors: formInputErrors } = formState;
 
+  const { isCreating, createCabin } = useCreateCabin();
+
   // * supabase DB
   const queryClient = useQueryClient();
-
-  const { mutate: createCabin, isLoading: isCreating } = useMutation({
-    mutationFn: createEditCabin,
-    onSuccess: () => {
-      toast.success("New cabin created successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
 
   const { mutate: editCabin, isLoading: isEditing } = useMutation({
     mutationFn: ({ editCabinData, editId }) =>
@@ -57,6 +48,8 @@ function CreateCabinForm({ cabin = {} }) {
     if (isEditSession)
       editCabin({ editCabinData: { ...data, image }, editId: editId });
     else createCabin({ ...data, image: image });
+
+    reset();
   }
 
   const onError = (errors) => {
