@@ -1,9 +1,16 @@
-import styled from "styled-components";
 import { useState } from "react";
+import styled from "styled-components";
+import {
+  HiMiniPencilSquare,
+  HiMiniXMark,
+  HiSquare2Stack,
+  HiTrash,
+} from "react-icons/hi2";
 
 import useDeleteCabin from "./useDeleteCabin";
 import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
+import useCreateCabin from "./useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -46,16 +53,30 @@ const Discount = styled.p`
 
 const CabinRow = ({ cabin }) => {
   const [showForm, setShowForm] = useState();
+
   const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { isCreating, createCabin } = useCreateCabin();
 
   const {
     id: cabinID,
-    image,
     name,
+    image,
     maxCapacity,
     regularPrice,
     discount,
+    description,
   } = cabin;
+
+  const handleDuplicateCabin = () => {
+    createCabin({
+      name: `Copy of ${name}`,
+      image,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+    });
+  };
 
   return (
     <>
@@ -66,11 +87,25 @@ const CabinRow = ({ cabin }) => {
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{discount ? formatCurrency(discount) : "--"}</Discount>
         <div>
-          <button onClick={() => setShowForm((showForm) => !showForm)}>
-            {!showForm ? "Edit" : "Close"}
+          <button
+            onClick={handleDuplicateCabin}
+            disabled={isCreating}
+            title="Duplicate cabin"
+          >
+            <HiSquare2Stack />
           </button>
-          <button onClick={() => deleteCabin(cabinID)} disabled={isDeleting}>
-            Delete
+          <button
+            onClick={() => setShowForm((showForm) => !showForm)}
+            title="Edit cabin"
+          >
+            {showForm ? <HiMiniXMark /> : <HiMiniPencilSquare />}
+          </button>
+          <button
+            onClick={() => deleteCabin(cabinID)}
+            disabled={isDeleting}
+            title="Delete cabin"
+          >
+            <HiTrash />
           </button>
         </div>
       </TableRow>
