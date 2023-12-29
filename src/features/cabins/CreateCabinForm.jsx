@@ -56,6 +56,13 @@ function CreateCabinForm({ cabin = {}, onCloseModal }) {
     console.log(errors);
   };
 
+  const buttonText = () => {
+    if (isEditSession) return isEditing ? "Editing cabin..." : "Edit cabin";
+    else return isCreating ? "Creating cabin..." : "Add new cabin";
+  };
+
+  const buttonContent = buttonText();
+
   return (
     <Form
       onSubmit={handleSubmit(onSubmit, onError)}
@@ -153,11 +160,7 @@ function CreateCabinForm({ cabin = {}, onCloseModal }) {
         >
           Cancel
         </Button>
-        <Button disabled={isWorking}>
-          {isEditSession
-            ? `${isEditing ? "Editing cabin..." : "Edit cabin"}`
-            : `${isCreating ? "Creating cabin..." : "Add new cabin"}`}
-        </Button>
+        <Button disabled={isWorking}>{buttonContent}</Button>
       </FormRow>
     </Form>
   );
