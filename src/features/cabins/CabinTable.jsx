@@ -18,11 +18,10 @@ const CabinTable = () => {
         <div>Discount</div>
         <div>Actions</div>
       </Table.Header>
-      <Table.Body>
-        {cabins.map((cabin) => (
-          <CabinRow key={cabin.name} cabin={cabin} />
-        ))}
-      </Table.Body>
+      <Table.Body
+        data={cabins}
+        render={(cabin) => <CabinRow key={cabin?.name} cabin={cabin} />}
+      />
     </Table>
   );
 };
