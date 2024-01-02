@@ -1,24 +1,14 @@
 import styled from "styled-components";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
-import { formatCurrency } from "../../utils/helpers";
 import useDeleteCabin from "./useDeleteCabin";
-import CreateCabinForm from "./CreateCabinForm";
 import useCreateCabin from "./useCreateCabin";
+import CreateCabinForm from "./CreateCabinForm";
 import Modal from "../../ui/Modal";
-import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
-
-// const TableRow = styled.div`
-//   display: grid;
-//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-//   column-gap: 2.4rem;
-//   align-items: center;
-//   padding: 1.4rem 3rem;
-//   &:not(:last-child) {
-//     border-bottom: 1px solid var(--color-grey-100);
-//   }
-// `;
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import { formatCurrency } from "../../utils/helpers";
+import Menus from "../../ui/Menus";
 
 const Image = styled.img`
   display: block;
@@ -114,6 +104,25 @@ const CabinRow = ({ cabin }) => {
             />
           </Modal.Window>
         </Modal>
+
+        <Menus.Menu>
+          <Menus.Toggle id={cabinID} />
+
+          <Menus.List id={cabinID}>
+            <Menus.Button>
+              <HiSquare2Stack />
+              <span>Duplicate</span>
+            </Menus.Button>
+            <Menus.Button>
+              <HiPencil />
+              <span>Edit</span>
+            </Menus.Button>
+            <Menus.Button>
+              <HiTrash />
+              <span>Delete</span>
+            </Menus.Button>
+          </Menus.List>
+        </Menus.Menu>
       </div>
     </Table.Row>
   );
