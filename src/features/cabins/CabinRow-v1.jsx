@@ -71,33 +71,31 @@ const CabinRow = ({ cabin }) => {
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{discount ? formatCurrency(discount) : "--"}</Discount>
       <div>
+        <button
+          onClick={handleDuplicateCabin}
+          disabled={isCreating}
+          title="Duplicate cabin"
+        >
+          <HiSquare2Stack />
+        </button>
+
         <Modal>
-          <Menus.Menu>
-            <Menus.Toggle id={cabinID} />
-
-            <Menus.List id={cabinID}>
-              <Menus.Button
-                icon={<HiSquare2Stack />}
-                onClick={handleDuplicateCabin}
-                disabled={isCreating}
-              >
-                Duplicate
-              </Menus.Button>
-
-              <Modal.Open opens="edit">
-                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-              </Modal.Open>
-
-              <Modal.Open opens="delete">
-                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-              </Modal.Open>
-            </Menus.List>
-          </Menus.Menu>
-
+          <Modal.Open opens="edit">
+            <button title="Edit cabin">
+              <HiPencil />
+            </button>
+          </Modal.Open>
           <Modal.Window name="edit">
             <CreateCabinForm cabin={cabin} />
           </Modal.Window>
+        </Modal>
 
+        <Modal>
+          <Modal.Open opens="delete">
+            <button title="Delete cabin">
+              <HiTrash />
+            </button>
+          </Modal.Open>
           <Modal.Window name="delete">
             <ConfirmDelete
               resourceName={`Cabin ${name}`}
@@ -106,6 +104,24 @@ const CabinRow = ({ cabin }) => {
             />
           </Modal.Window>
         </Modal>
+
+        <Menus.Menu>
+          <Menus.Toggle id={cabinID} />
+
+          <Menus.List id={cabinID}>
+            <Menus.Button
+              icon={<HiSquare2Stack />}
+              onClick={handleDuplicateCabin}
+              disabled={isCreating}
+            >
+              Duplicate
+            </Menus.Button>
+
+            <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+
+            <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+          </Menus.List>
+        </Menus.Menu>
       </div>
     </Table.Row>
   );

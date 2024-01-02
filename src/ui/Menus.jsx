@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import styled from "styled-components";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import { createPortal } from "react-dom";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const Menu = styled.div`
   display: flex;
@@ -70,12 +71,12 @@ const Menus = ({ children }) => {
   const [openId, setOpenId] = useState("");
   const [menuPosition, setMenuPosition] = useState(null);
 
-  const close = () => setOpenId("");
-  const open = setOpenId;
+  const closeToggle = () => setOpenId("");
+  const openToggle = setOpenId;
 
   return (
     <MenuContext.Provider
-      value={{ openId, open, close, menuPosition, setMenuPosition }}
+      value={{ openId, openToggle, closeToggle, menuPosition, setMenuPosition }}
     >
       {children}
     </MenuContext.Provider>
@@ -83,7 +84,8 @@ const Menus = ({ children }) => {
 };
 
 function Toggle({ id }) {
-  const { openId, open, close, setMenuPosition } = useContext(MenuContext);
+  const { openId, openToggle, closeToggle, setMenuPosition } =
+    useContext(MenuContext);
 
   function handleClick(e) {
     const rect = e.target.closest("button").getBoundingClientRect();
@@ -92,9 +94,8 @@ function Toggle({ id }) {
       y: rect.y + rect.height + 8,
     });
 
-    openId === "" || id !== openId ? open(id) : close();
+    openId === "" || openId !== id ? openToggle(id) : closeToggle();
   }
-
   return (
     <StyledToggle onClick={handleClick}>
       <HiEllipsisVertical />
@@ -103,20 +104,32 @@ function Toggle({ id }) {
 }
 
 function List({ children, id }) {
-  const { openId, menuPosition } = useContext(MenuContext);
+  const { openId, menuPosition, closeToggle } = useContext(MenuContext);
+  const { ref } = useOutsideClick(closeToggle);
 
   if (openId !== id) return null;
 
   return createPortal(
-    <StyledList position={menuPosition}>{children}</StyledList>,
+    <StyledList position={menuPosition} ref={ref}>
+      {children}
+    </StyledList>,
     document.body
   );
 }
 
-function Button({ children }) {
+function Button({ children, icon, onClick, disabled }) {
+  const { closeToggle } = useContext(MenuContext);
+
+  function handleClick() {
+    onClick?.();
+    closeToggle();
+  }
   return (
     <li>
-      <StyledButton>{children}</StyledButton>
+      <StyledButton onClick={handleClick} disabled={disabled}>
+        {icon}
+        <span>{children}</span>
+      </StyledButton>
     </li>
   );
 }

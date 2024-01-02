@@ -20,7 +20,7 @@ const CabinTable = () => {
           <div>Discount</div>
           <div>Actions</div>
         </Table.Header>
-        
+
         <Table.Body
           data={cabins}
           render={(cabin) => <CabinRow key={cabin?.name} cabin={cabin} />}
